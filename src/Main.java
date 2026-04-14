@@ -1,5 +1,6 @@
 import java.util.*;
-import java.io.*;
+import com.murcia.utils.*;
+
 class Main {
     public static void main(String[] args) throws Exception{
         File file=new File("randomtext.txt");
