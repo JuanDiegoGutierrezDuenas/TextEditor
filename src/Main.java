@@ -21,14 +21,20 @@ public class Main {
         Editor edit = new Editor(l);
         sc = new Scanner(System.in);
 
+        String[] opciones ={
+            "S - Save and Exit",
+            "F - Move Forward",
+            "B - Move Backward",
+            "b - Move to Beginning of line",
+            "e - Move to End of Line",
+            "i - Insert",
+            "d - DElete"
+        };
+        Menu menu = new Menu(opciones, 'V', "\n", "Editor de texto");
+       
         while(true) {
-            System.out.println("S - Save and Exit");
-            System.out.println("F - Move Forward");
-            System.out.println("B - Move Backward");
-            System.out.println("b - Move to Beginning of Line");
-            System.out.println("e - Move to End of Line");
-            System.out.println("i - Insert");
-            System.out.println("d - Delete");
+            Consola.clrscr();
+            System.out.println(menu.toString());
 
             edit.print();
             edit.printCursor();
@@ -41,8 +47,6 @@ public class Main {
             else if(input.equals("e")) edit.ending();
             else if(input.equals("i")) edit.insert(sc.nextLine());
             else if(input.equals("d")) edit.delete();
-
-            Consola.clrscr();
 
             file.delete();
             file.createNewFile();
