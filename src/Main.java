@@ -66,17 +66,25 @@ class Editor {
     }
 
     public void forward() {
+        if(l.size() == 0) return;
+        if(node >= l.size()) node = l.size() - 1;
+
         StringBuilder s = l.get(node);
-        if(position == s.length()) {
+        if(position >= s.length()) {
             if(node == l.size() - 1) node = 0;
             else node++;
             position = 0;
         } else position++;
-        s = l.get(node);
-        if(s.toString().equals("\n")) forward();
+        if(node < l.size()) {
+            s = l.get(node);
+            if(s.toString().equals("\n")) forward();
+        }
     }
 
     public void backward() {
+        if(l.size() == 0) return;
+        if(node >= l.size()) node = l.size() - 1;
+
         StringBuilder s = l.get(node);
         if(position == 0) {
             if(node == 0) node = l.size() - 1;
@@ -84,40 +92,51 @@ class Editor {
             s = l.get(node);
             position = s.length();
         } else position--;
-        s = l.get(node);
-        if(s.toString().equals("\n")) backward();
+        if(node < l.size()) {
+            s = l.get(node);
+            if(s.toString().equals("\n")) backward();
+        }
     }
 
     public void insert(String input) {
+        if(l.size() == 0) return;
+        if(node >= l.size()) node = l.size() - 1;
+
         StringBuilder s = l.get(node);
         if(s.length() == 0) s.append(input);
-        else s.insert(position, input);
-        position += input.length();
+        else s.insert(Math.min(position, s.length()), input);
+        position = Math.min(position + input.length(), s.length());
     }
 
     public void delete() {
+        if(l.size() == 0) return;
+        if(node >= l.size()) node = l.size() - 1;
+
         StringBuilder s = l.get(node);
         if(position == 0 && node > 0) {
             StringBuilder prev = l.get(node - 1);
             position = prev.length();
             prev.append(s);
             l.remove(node);
-        } else if(position > 0) {
+            if(node >= l.size()) node = l.size() - 1;
+        } else if(position > 0 && position <= s.length()) {
             s.delete(position - 1, position);
             position--;
         }
     }
 
     public void beginning() {
+        if(l.size() == 0) return;
         while(node > 0 && !l.get(node).toString().equals("\n")) node--;
-        if(node != 0) node = node + 1;
+        if(node != 0) node++;
         position = 0;
     }
 
     public void ending() {
-        while(!l.get(node).toString().equals("\n")) node++;
-        node = node - 1;
-        position = l.get(node).length();
+        if(l.size() == 0) return;
+        while(node < l.size() && !l.get(node).toString().equals("\n")) node++;
+        if(node > 0) node--;
+        if(node < l.size()) position = l.get(node).length();
     }
 
     public void print() throws Exception {
@@ -134,6 +153,13 @@ class Editor {
     }
 
     public void printCursor() {
+        if(l.size() == 0) {
+            System.out.println("Cursor At : |");
+            return;
+        }
+        if(node < 0) node = 0;
+        if(node >= l.size()) node = l.size() - 1;
+
         System.out.print("Cursor At : ");
         StringBuilder s = l.get(node);
         for(int i = 0; i < s.length(); i++) {
@@ -144,3 +170,4 @@ class Editor {
         System.out.println();
     }
 }
+
